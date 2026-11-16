@@ -1,0 +1,42 @@
+.DS_Store
+
+# Local dependencies, builds, and test output
+/node_modules/
+/dist/
+/.venv/
+__pycache__/
+*.py[cod]
+/.coverage
+/.coverage.*
+/playwright-report/
+/test-results/
+
+# Local AWS deployment artifacts, settings, and credentials
+/.aws-sam/
+/.aws/
+/samconfig.toml
+/samconfig.yaml
+/samconfig.yml
+.env
+.env.*
+
+# Local demo recordings, walkthroughs, and production files
+/demo/
+/demo-video/
+/docs/demo/
+/*demo*.md
+/docs/*demo*.md
+/docs/screenshots/
+/scripts/*demo*
+*.mp4
+*.mov
+*.webm
+*.m4a
+*.mp3
+*.wav
+*.srt
+*.vtt
+
+# Local recording skill and the manifest that lists it
+/.agents/skills/ui-demo/
+/skills-lock.json

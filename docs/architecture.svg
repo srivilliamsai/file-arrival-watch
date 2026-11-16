@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1160 854" role="img" aria-labelledby="title description">
+  <title id="title">File Arrival Watch AWS architecture</title>
+  <desc id="description">Browsers load the CloudFront dashboard from a private S3 site. Cognito signs in operators, and API Gateway routes requests to an API Lambda. The Lambda stores CSVs in private S3 and reads DynamoDB. S3 upload events and an EventBridge Scheduler cutoff invoke the validation Lambda. It writes delivery outcomes to DynamoDB. Missed deadlines flow through DynamoDB Streams and a notification Lambda to SNS email. SQS retains failed events, and CloudWatch records logs and alarms.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 8 4 0 8Z" fill="#4d4d4d"/>
+    </marker>
+    <style>
+      text { font-family: Inter, Arial, sans-serif; fill: #202020; }
+      .heading { font-family: 'Inter Tight', Inter, Arial, sans-serif; font-weight: 400; letter-spacing: -.02em; }
+      .name { font-size: 19px; font-weight: 600; }
+      .detail, .connection, .footnote { fill: #4d4d4d; }
+      .detail { font-size: 15px; }
+      .connection { font-size: 14px; }
+      .footnote { font-size: 16px; }
+      .surface { fill: #f5f5f5; }
+      .node { fill: #fff; stroke: #d2d1ce; }
+      .link { fill: none; stroke: #4d4d4d; stroke-width: 1.5; marker-end: url(#arrow); }
+      .inverse { fill: #fff; }
+    </style>
+  </defs>
+
+  <rect width="1160" height="854" fill="#fff"/>
+  <rect x="40.5" y="24.5" width="23" height="23" fill="none" stroke="#202020"/>
+  <path d="M46 30H58M46 34H58M46 38H58M46 42H58" stroke="#202020"/>
+  <text class="heading" x="76" y="43" font-size="21">File Arrival Watch</text>
+  <text class="heading" x="40" y="105" font-size="56">AWS architecture</text>
+  <text class="detail" x="1120" y="101" text-anchor="end">AWS SAM · Mumbai (ap-south-1)</text>
+  <path d="M40 125H1120" stroke="#e8e8e8"/>
+
+  <path class="surface" d="M40 152Q40 146 46 146H1120V340H40Z"/>
+  <path d="M40 366Q40 360 46 360H1120V620H40Z" fill="#efefef"/>
+  <path class="surface" d="M40 646Q40 640 46 640H1120V798H40Z"/>
+  <text class="heading" x="64" y="179" font-size="24">Dashboard access</text>
+  <text class="heading" x="64" y="393" font-size="24">CSV validation and cutoff</text>
+  <text class="heading" x="64" y="674" font-size="24">Missed-deadline alert</text>
+
+  <g aria-hidden="true">
+    <path class="link" d="M242 222H310"/>
+    <path class="link" d="M154 273V298H310"/>
+    <path class="link" d="M242 262H590"/>
+    <path class="link" d="M780 239H864"/>
+    <path class="link" d="M922 273V409H405V450"/>
+    <path class="link" d="M1039 273V450"/>
+    <path class="link" d="M242 484H310"/>
+    <path class="link" d="M500 484H590"/>
+    <path class="link" d="M780 484H864"/>
+    <path class="link" d="M540 571H685V518"/>
+    <path class="link" d="M973 518V705"/>
+    <path class="link" d="M864 739H780"/>
+    <path class="link" d="M590 739H500"/>
+  </g>
+
+  <text class="connection" x="665" y="399" text-anchor="middle">Store CSV</text>
+  <text class="connection" x="1029" y="399" text-anchor="end">Read status</text>
+  <text class="connection" x="545" y="473" text-anchor="middle">S3 event</text>
+  <text class="connection" x="612" y="560" text-anchor="middle">Daily cutoff</text>
+  <text class="connection" x="958" y="679" text-anchor="end">DynamoDB stream · missed deadlines</text>
+
+  <g transform="translate(64 205)">
+    <rect class="node" width="178" height="68"/>
+    <text class="name" x="12" y="28">Browser</text>
+    <text class="detail" x="12" y="50">Buyer or operator</text>
+  </g>
+  <g transform="translate(310 192)">
+    <rect class="node" width="190" height="59"/>
+    <text class="name" x="12" y="25">CloudFront</text>
+    <text class="detail" x="12" y="47">Private S3 site origin</text>
+  </g>
+  <g transform="translate(310 271)">
+    <rect class="node" width="190" height="54"/>
+    <text class="name" x="12" y="23">Amazon Cognito</text>
+    <text class="detail" x="12" y="44">Operator sign-in · PKCE</text>
+  </g>
+  <g transform="translate(590 205)">
+    <rect class="node" width="190" height="68"/>
+    <text class="name" x="12" y="28">API Gateway</text>
+    <text class="detail" x="12" y="50">HTTP API · JWT</text>
+  </g>
+  <g transform="translate(864 205)">
+    <rect class="node" width="220" height="68"/>
+    <text class="name" x="12" y="28">API Lambda</text>
+    <text class="detail" x="12" y="50">Status and uploads</text>
+  </g>
+
+  <g transform="translate(64 450)">
+    <rect class="node" width="178" height="68"/>
+    <text class="name" x="12" y="28">Stock export</text>
+    <text class="detail" x="12" y="50">Create-only S3 upload</text>
+  </g>
+  <g transform="translate(310 450)">
+    <rect class="node" width="190" height="68"/>
+    <text class="name" x="12" y="28">Amazon S3</text>
+    <text class="detail" x="12" y="50">Private CSV bucket</text>
+  </g>
+  <g transform="translate(590 450)">
+    <rect width="190" height="68" fill="#202020"/>
+    <text class="name inverse" x="12" y="28">Validation Lambda</text>
+    <text class="detail inverse" x="12" y="50">Validate and check S3</text>
+  </g>
+  <g transform="translate(864 450)">
+    <rect class="node" width="220" height="68"/>
+    <text class="name" x="12" y="28">DynamoDB</text>
+    <text class="detail" x="12" y="50">Receipts and cutoff results</text>
+  </g>
+  <g transform="translate(310 544)">
+    <rect class="node" width="230" height="54"/>
+    <path d="M.5 .5H24" stroke="#ff682c" stroke-width="2"/>
+    <text class="name" x="12" y="23">EventBridge Scheduler</text>
+    <text class="detail" x="12" y="44">Warehouse time zone</text>
+  </g>
+
+  <g transform="translate(864 705)">
+    <rect class="node" width="220" height="68"/>
+    <text class="name" x="12" y="28">Notification Lambda</text>
+    <text class="detail" x="12" y="50">Publish missed deadline</text>
+  </g>
+  <g transform="translate(590 705)">
+    <rect class="node" width="190" height="68"/>
+    <text class="name" x="12" y="28">Amazon SNS</text>
+    <text class="detail" x="12" y="50">Email subscription</text>
+  </g>
+  <g transform="translate(310 705)">
+    <rect class="node" width="190" height="68"/>
+    <path d="M.5 .5H24" stroke="#ff682c" stroke-width="2"/>
+    <text class="name" x="12" y="28">Test inbox</text>
+    <text class="detail" x="12" y="50">Cutoff and reference</text>
+  </g>
+
+  <circle cx="44" cy="826" r="4" fill="#ff682c"/>
+  <text class="footnote" x="57" y="831">SQS keeps failed events · CloudWatch records logs and alarms</text>
+</svg>

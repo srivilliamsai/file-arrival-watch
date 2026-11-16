@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="description" content="Check whether the warehouse stock file is ready for today's orders.">
+  <link rel="icon" href="./favicon.ico">
+  <title>File Arrival Watch</title>
+  <link rel="stylesheet" href="./variables.css">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <header class="site-header page">
+    <a class="brand" href="./"><span class="brand-mark" aria-hidden="true">▤</span> File Arrival Watch</a>
+    <nav aria-label="Dashboard">
+      <a href="#delivery" aria-current="location">Today</a>
+      <a href="#history">History</a>
+    </nav>
+    <span class="sample-label"><span aria-hidden="true"></span> Sample data</span>
+  </header>
+
+  <main class="page" id="main" tabindex="-1">
+    <section class="operator-card" id="operator-view" aria-labelledby="operator-sign-in-heading" hidden>
+      <p class="brand"><span class="brand-mark" aria-hidden="true">▤</span> File Arrival Watch</p>
+      <h1 id="operator-sign-in-heading" tabindex="-1">Operator sign in</h1>
+      <p id="sign-in-description">Sign in with your warehouse operator account to upload stock CSVs.</p>
+      <button type="button" class="button" id="continue-sign-in" disabled>Continue to AWS sign-in</button>
+      <p class="operator-feedback" id="sign-in-feedback" role="alert"></p>
+      <a class="text-button" id="back-to-dashboard" href="#delivery">Back to dashboard</a>
+    </section>
+    <div class="time-display">
+      <span class="time-display-label" id="time-display-label">Show times in</span>
+      <div class="time-select">
+        <button class="time-trigger" id="time-display" type="button" role="combobox" aria-labelledby="time-display-label" aria-describedby="display-time-zone" aria-controls="time-options" aria-expanded="false" disabled>Warehouse time</button>
+        <ul class="time-options" id="time-options" role="listbox" aria-labelledby="time-display-label" hidden>
+          <li class="time-option" id="time-warehouse" role="option" aria-selected="true" data-value="warehouse">Warehouse time</li>
+          <li class="time-option" id="time-local" role="option" aria-selected="false" data-value="local">My local time</li>
+        </ul>
+      </div>
+      <span id="display-time-zone" class="small" aria-live="polite"></span>
+    </div>
+    <div id="delivery-view">
+      <div class="intro">
+        <p class="warehouse" id="warehouse">Warehouse stock</p>
+        <h1>Today’s delivery</h1>
+        <p>Check whether the stock file is ready for today’s orders.</p>
+      </div>
+
+      <div class="delivery-grid">
+        <section class="delivery-card" aria-labelledby="delivery-heading" aria-live="polite" aria-atomic="true">
+          <div class="delivery-top">
+            <p id="delivery-heading">Stock file status</p>
+            <time id="delivery-date"></time>
+          </div>
+          <div class="state" id="delivery-state">
+            <span class="state-mark" id="state-mark" aria-hidden="true"></span>
+            <h2 id="state-title">Checking status</h2>
+          </div>
+          <p id="state-message">Loading the latest warehouse delivery.</p>
+          <dl class="delivery-times">
+            <div><dt>Due by</dt><dd id="cutoff">—</dd></div>
+            <div><dt>First valid file</dt><dd id="received">—</dd></div>
+            <div><dt>Latest upload</dt><dd id="latest-upload">—</dd></div>
+          </dl>
+          <button type="button" class="button outlined" id="retry-status" hidden>Retry status check</button>
+        </section>
+
+        <section class="upload-card" aria-labelledby="upload-heading">
+          <div class="upload-icon" aria-hidden="true">↑</div>
+          <h2 id="upload-heading" tabindex="-1">Upload stock CSV</h2>
+          <p id="operator-note">Sign in as the warehouse operator to send today’s file or replace a rejected upload.</p>
+          <button type="button" class="button" id="sign-in" disabled>Operator sign in</button>
+          <form id="upload-form" hidden>
+            <label for="csv-file">Choose a CSV file</label>
+            <input id="csv-file" name="file" type="file" accept=".csv,text/csv" aria-describedby="file-hint">
+            <p id="file-hint" class="small">UTF-8 CSV · Up to 256 KiB and 5,000 rows</p>
+            <button class="button" type="submit" id="submit-upload">Upload CSV</button>
+          </form>
+          <p id="upload-feedback" role="status" aria-live="polite"></p>
+          <ul id="upload-errors" class="errors" hidden></ul>
+          <button type="button" class="text-button" id="sign-out" hidden>Sign out</button>
+        </section>
+      </div>
+      <details class="upload-activity" id="upload-activity" hidden>
+        <summary>Today’s upload activity</summary>
+        <p id="activity-message" aria-live="polite"></p>
+        <ul id="activity-results"></ul>
+        <button type="button" class="text-button" id="refresh-activity">Refresh upload activity</button>
+      </details>
+    </div>
+
+    <section class="history" id="history-view" aria-labelledby="history-heading" hidden>
+      <div class="intro">
+        <h1 id="history-heading">Delivery history</h1>
+        <p>Today and recorded outcomes from the previous 7 warehouse days</p>
+      </div>
+      <table id="history-table" hidden>
+        <caption class="sr-only">Warehouse delivery history</caption>
+        <thead><tr><th scope="col">Date</th><th scope="col">Deadline</th><th scope="col">First valid file</th><th scope="col">Latest upload</th><th scope="col">Result</th></tr></thead>
+        <tbody id="history-rows"></tbody>
+      </table>
+      <ul id="history-mobile" class="history-mobile" aria-label="Warehouse delivery history" hidden></ul>
+      <p id="history-empty">Loading delivery history.</p>
+    </section>
+  </main>
+  <footer class="page footer">
+    <span>File Arrival Watch</span>
+    <span id="warehouse-day-note">Dates follow warehouse time</span>
+  </footer>
+</body>
+</html>
